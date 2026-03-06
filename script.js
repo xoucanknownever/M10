@@ -11,6 +11,10 @@ function revealPageContent() {
   contentRevealed = true;
   document.body.classList.remove('loading');
   document.body.classList.add('loaded');
+  // Start music automatically after loading finishes
+  if (typeof autoPlayAfterLoad === 'function') {
+    setTimeout(autoPlayAfterLoad, 600);
+  }
 }
 
 if (splineViewer) {
@@ -579,15 +583,15 @@ const iconOn       = document.getElementById('music-icon-on');
 const iconOff      = document.getElementById('music-icon-off');
 let musicPlaying   = false;
 let fadingInterval = null;
+let musicBusy      = false; // prevents overlapping toggle actions
 
 function showRestartBtn() {
   if (musicRestart) musicRestart.classList.add('visible');
 }
-function hideRestartBtn() {
-  if (musicRestart) musicRestart.classList.remove('visible');
-}
 
 function startMusic() {
+  if (musicBusy) return;
+  musicBusy = true;
   if (fadingInterval) { clearInterval(fadingInterval); fadingInterval = null; }
   bgMusic.play().then(() => {
     musicPlaying = true;
@@ -595,17 +599,18 @@ function startMusic() {
     iconOn.style.display  = 'block';
     iconOff.style.display = 'none';
     showRestartBtn();
-    // Fade in volume
     let vol = bgMusic.volume;
     fadingInterval = setInterval(() => {
       vol = Math.min(vol + 0.05, 0.4);
       bgMusic.volume = vol;
-      if (vol >= 0.4) { clearInterval(fadingInterval); fadingInterval = null; }
+      if (vol >= 0.4) { clearInterval(fadingInterval); fadingInterval = null; musicBusy = false; }
     }, 80);
-  }).catch(() => { /* autoplay blocked */ });
+  }).catch(() => { musicBusy = false; });
 }
 
 function pauseMusic() {
+  if (musicBusy) return;
+  musicBusy = true;
   if (fadingInterval) { clearInterval(fadingInterval); fadingInterval = null; }
   let vol = bgMusic.volume;
   fadingInterval = setInterval(() => {
@@ -619,6 +624,7 @@ function pauseMusic() {
       musicToggle.classList.remove('playing');
       iconOn.style.display  = 'none';
       iconOff.style.display = 'block';
+      musicBusy = false;
     }
   }, 60);
 }
@@ -626,7 +632,9 @@ function pauseMusic() {
 if (musicToggle && bgMusic) {
   bgMusic.volume = 0;
 
-  musicToggle.addEventListener('click', () => {
+  musicToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (musicBusy) return;
     if (!musicPlaying) {
       startMusic();
     } else {
@@ -637,7 +645,9 @@ if (musicToggle && bgMusic) {
 
 // Restart button — rewinds to 0:00 and plays
 if (musicRestart && bgMusic) {
-  musicRestart.addEventListener('click', () => {
+  musicRestart.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (fadingInterval) { clearInterval(fadingInterval); fadingInterval = null; musicBusy = false; }
     bgMusic.currentTime = 0;
     if (!musicPlaying) {
       startMusic();
@@ -645,16 +655,12 @@ if (musicRestart && bgMusic) {
   });
 }
 
-// Auto-play on first user interaction (click/touch anywhere)
-function autoPlayOnce() {
+// Auto-play music after loading screen ends
+function autoPlayAfterLoad() {
   if (!musicPlaying && bgMusic) {
     startMusic();
   }
-  document.removeEventListener('click', autoPlayOnce);
-  document.removeEventListener('touchstart', autoPlayOnce);
 }
-document.addEventListener('click', autoPlayOnce, { once: true });
-document.addEventListener('touchstart', autoPlayOnce, { once: true });
 
 // ─────────────────────────────────────────────
 //  HIDE SCROLL HINT ON SCROLL

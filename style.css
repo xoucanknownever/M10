@@ -7,6 +7,9 @@
 html {
   width: 100%;
   scroll-behavior: smooth;
+  /* GPU acceleration hints */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 body {
@@ -43,14 +46,28 @@ body:hover #cursor-glow {
   position: relative;
   width: 100%;
   height: 100vh;
-  height: 100svh;       /* stable viewport height — ignores mobile toolbar resize */
+  height: 100svh;
   overflow: hidden;
   contain: size layout;
+}
+
+/* ── HERO → CONTENT SMOOTH GRADIENT BLEND ── */
+#hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 180px;
+  background: linear-gradient(to bottom, transparent 0%, #0d0008 100%);
+  pointer-events: none;
+  z-index: 30;
 }
 
 /* ── BACKGROUND ── */
 #bg {
   position: absolute; inset: 0;
+  will-change: filter;
+  transform: translateZ(0);
+  backface-visibility: hidden;
   background:
     radial-gradient(ellipse 120% 80% at 20% 30%, #ff6eb4 0%, transparent 60%),
     radial-gradient(ellipse 100% 100% at 80% 70%, #ff3d8a 0%, transparent 55%),
@@ -80,6 +97,8 @@ body:hover #cursor-glow {
   border-radius: 50%;
   animation: blobFloat ease-in-out infinite alternate;
   will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @keyframes blobFloat {
@@ -118,6 +137,8 @@ body:hover #cursor-glow {
 #canvas {
   position: absolute; inset: 0;
   pointer-events: none;
+  will-change: contents;
+  transform: translateZ(0);
 }
 
 /* ── VIGNETTE ── */
@@ -357,7 +378,8 @@ spline-viewer {
 
 body.loading #blur-overlay {
   opacity: 1;
-  pointer-events: all; /* blocks interaction with the page */
+  pointer-events: all;
+  background: rgba(13, 0, 8, 0.95);
 }
 
 /* ── LOADER PANEL ── */
@@ -425,8 +447,13 @@ body.loading #loader {
 body.loading spline-viewer,
 body.loading #anniversary-text,
 body.loading #haryx-badge,
-body.loading #canvas {
-  opacity: 0;
+body.loading #canvas,
+body.loading #music-controls,
+body.loading #scroll-progress,
+body.loading #scroll-hint,
+body.loading #easter-egg-star,
+body.loading #cursor-glow {
+  opacity: 0 !important;
   pointer-events: none !important;
   transition: none;
 }
@@ -437,7 +464,10 @@ body.loading #canvas {
 spline-viewer,
 #anniversary-text,
 #haryx-badge,
-#canvas {
+#canvas,
+#music-controls,
+#scroll-hint,
+#easter-egg-star {
   transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -462,23 +492,27 @@ spline-viewer,
    ══════════════════════════════════════════════ */
 #scroll-hint {
   position: absolute;
-  bottom: 130px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 50%;
+  right: 18px;
+  left: auto;
+  transform: translateY(50%);
   z-index: 25;
   text-align: center;
   color: rgba(255,255,255,0.7);
   font-family: 'Lora', serif;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   letter-spacing: 2px;
   text-transform: uppercase;
+  writing-mode: vertical-rl;
   animation: hintFade 3s ease-in-out infinite;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 #scroll-hint .scroll-arrow {
-  margin-top: 6px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   animation: hintBounce 2s ease-in-out infinite;
 }
 
@@ -552,11 +586,12 @@ spline-viewer,
 /* ── Scroll reveal animation — 3D depth ── */
 .reveal {
   opacity: 0;
-  transform: translateY(50px) translateZ(-30px) scale(0.97);
+  transform: translateY(50px) translateZ(0) scale(0.97);
   transition:
     opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
     transform 1s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .reveal.visible {
@@ -838,13 +873,15 @@ spline-viewer,
   border-radius: 6px;
   box-shadow: 0 6px 24px rgba(0,0,0,0.35), 0 0 40px rgba(255,62,138,0.06);
   cursor: pointer;
-  transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s;
-  /* Random rotation applied via JS */
+  transition: transform 0.35s ease-out, box-shadow 0.35s ease-out;
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .polaroid:hover {
-  transform: rotate(0deg) scale(1.08) translateY(-8px) !important;
-  box-shadow: 0 16px 50px rgba(255,62,138,0.3), 0 0 60px rgba(255,62,138,0.1);
+  transform: rotate(0deg) scale(1.05) translateY(-6px) translateZ(0) !important;
+  box-shadow: 0 14px 40px rgba(255,62,138,0.3), 0 0 50px rgba(255,62,138,0.1);
   z-index: 5;
 }
 
@@ -1030,21 +1067,21 @@ spline-viewer,
 }
 
 #music-restart {
-  width: 38px; height: 38px;
+  width: 44px; height: 44px;
   border-radius: 50%;
-  border: 1px solid rgba(255,110,180,0.25);
-  background: rgba(255,62,138,0.10);
+  border: 1px solid rgba(255,110,180,0.3);
+  background: rgba(255,62,138,0.12);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  color: rgba(255,200,225,0.6);
+  color: rgba(255,200,225,0.7);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s, transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s, opacity 0.4s;
   opacity: 0;
   pointer-events: none;
-  transform: scale(0.8);
+  transform: scale(0.8) translateZ(0);
 }
 
 #music-restart.visible {
@@ -1054,13 +1091,17 @@ spline-viewer,
 }
 
 #music-restart:hover {
-  background: rgba(255,62,138,0.3);
-  transform: scale(1.12);
-  box-shadow: 0 0 16px rgba(255,62,138,0.35);
+  background: rgba(255,62,138,0.25);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255,62,138,0.3);
 }
 
 #music-restart:active {
   transform: scale(0.92);
+}
+
+#music-restart.visible:hover {
+  color: rgba(255,200,225,0.9);
 }
 
 #music-toggle {
@@ -1078,6 +1119,7 @@ spline-viewer,
   align-items: center;
   justify-content: center;
   transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  transform: translateZ(0);
 }
 
 #music-toggle:hover {
@@ -1294,13 +1336,10 @@ button:focus-visible {
   opacity: 1;
 }
 
-/* Polaroid tilt micro-interaction */
-.polaroid {
-  transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s, filter 0.4s;
-}
-
-.polaroid:hover {
-  filter: brightness(1.05) saturate(1.1);
+/* Polaroid tilt micro-interaction — GPU-accelerated */
+.polaroid-img {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* Gallery modal smoother backdrop */
