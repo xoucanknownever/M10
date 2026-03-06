@@ -1,31 +1,66 @@
 'use strict';
 
 // ─────────────────────────────────────────────
-//  SPLINE LOADER
+//  SPLINE LOADER + LOADING SCREEN
 // ─────────────────────────────────────────────
 const splineViewer = document.querySelector('spline-viewer');
+const pageStartTime = performance.now();
+const MIN_LOAD_TIME = 2500; // Show loading screen for at least 2.5 seconds
 let contentRevealed = false;
 
 function revealPageContent() {
   if (contentRevealed) return;
-  contentRevealed = true;
-  document.body.classList.remove('loading');
-  document.body.classList.add('loaded');
-  // Start music automatically after loading finishes
-  if (typeof autoPlayAfterLoad === 'function') {
-    setTimeout(autoPlayAfterLoad, 600);
+
+  // Enforce minimum loading screen display time
+  const elapsed = performance.now() - pageStartTime;
+  if (elapsed < MIN_LOAD_TIME) {
+    setTimeout(revealPageContent, MIN_LOAD_TIME - elapsed);
+    return;
   }
+
+  contentRevealed = true;
+
+  const blurOverlay = document.getElementById('blur-overlay');
+  const loader = document.getElementById('loader');
+
+  // Step 1: Fade out the loader text + hearts
+  if (loader) {
+    loader.style.transition = 'opacity 0.6s ease';
+    void loader.offsetHeight; // Force reflow so transition registers
+    loader.style.opacity = '0';
+  }
+
+  // Step 2: After loader fades, reveal page content + fade dark overlay
+  setTimeout(function () {
+    // Remove loading class — page content fades in via CSS transitions
+    document.body.classList.remove('loading');
+    document.body.classList.add('loaded');
+
+    // Fade out the dark blur overlay with JS (bulletproof, no CSS race)
+    if (blurOverlay) {
+      blurOverlay.style.transition = 'opacity 1s cubic-bezier(0.4,0,0.2,1)';
+      void blurOverlay.offsetHeight; // Force reflow
+      blurOverlay.style.opacity = '0';
+      blurOverlay.style.pointerEvents = 'none';
+    }
+
+    // Clean up loader elements after transitions finish
+    setTimeout(function () {
+      if (loader && loader.parentNode) loader.remove();
+      if (blurOverlay && blurOverlay.parentNode) blurOverlay.remove();
+    }, 1200);
+  }, 700);
 }
 
 if (splineViewer) {
   splineViewer.addEventListener('load', revealPageContent, { once: true });
 }
 
-window.addEventListener('load', () => {
+window.addEventListener('load', function () {
   setTimeout(revealPageContent, 1200);
 }, { once: true });
 
-setTimeout(revealPageContent, 9000);
+setTimeout(revealPageContent, 12000);
 
 // ─────────────────────────────────────────────
 //  CANVAS SETUP
@@ -528,26 +563,27 @@ const modalClose     = galleryModal.querySelector('.modal-close');
 const modalBackdrop  = galleryModal.querySelector('.modal-backdrop');
 
 document.querySelectorAll('.polaroid').forEach(card => {
-  card.addEventListener('click', () => {
-    const imgDiv = card.querySelector('.polaroid-img');
-    const bgImage = imgDiv.style.backgroundImage;
-    // Extract URL from background-image
-    const url = bgImage.replace(/url\(['"]?/, '').replace(/['"]?\)/, '');
-    modalImg.src = url;
+  card.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const src = card.dataset.src;
+    if (!src) return;
+    modalImg.src = src;
     modalCaption.textContent = card.dataset.caption || '';
     modalDate.textContent = card.dataset.date || '';
     galleryModal.classList.add('active');
     galleryModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
   });
 });
 
 function closeModal() {
   galleryModal.classList.remove('active');
   galleryModal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
 }
 
-modalClose.addEventListener('click', closeModal);
-modalBackdrop.addEventListener('click', closeModal);
+modalClose.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+modalBackdrop.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && galleryModal.classList.contains('active')) closeModal();
 });
@@ -655,40 +691,7 @@ if (musicRestart && bgMusic) {
   });
 }
 
-// Auto-play music after loading screen ends
-function autoPlayAfterLoad() {
-  if (musicPlaying || !bgMusic) return;
-  // Attempt immediate autoplay
-  bgMusic.volume = 0;
-  const playAttempt = bgMusic.play();
-  if (playAttempt) {
-    playAttempt.then(() => {
-      // Autoplay succeeded
-      musicPlaying = true;
-      musicToggle.classList.add('playing');
-      iconOn.style.display  = 'block';
-      iconOff.style.display = 'none';
-      showRestartBtn();
-      let vol = 0;
-      fadingInterval = setInterval(() => {
-        vol = Math.min(vol + 0.05, 0.4);
-        bgMusic.volume = vol;
-        if (vol >= 0.4) { clearInterval(fadingInterval); fadingInterval = null; musicBusy = false; }
-      }, 80);
-    }).catch(() => {
-      // Autoplay blocked by browser — wait for first user gesture
-      function gesturePlay() {
-        if (!musicPlaying) startMusic();
-        document.removeEventListener('click', gesturePlay);
-        document.removeEventListener('touchstart', gesturePlay);
-        document.removeEventListener('keydown', gesturePlay);
-      }
-      document.addEventListener('click', gesturePlay, { once: true });
-      document.addEventListener('touchstart', gesturePlay, { once: true });
-      document.addEventListener('keydown', gesturePlay, { once: true });
-    });
-  }
-}
+// Music only plays when the user explicitly clicks the toggle button
 
 // ─────────────────────────────────────────────
 //  HIDE SCROLL HINT ON SCROLL

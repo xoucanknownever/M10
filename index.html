@@ -5,11 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>4th Anniversary</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 88 C25 65 5 50 5 30 A22 22 0 0 1 50 20 A22 22 0 0 1 95 30 C95 50 75 65 50 88Z' fill='%23e60033'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=9">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.61/build/spline-viewer.js"></script>
+<style>
+  /* Critical loader styles — inline so they work even if style.css is cached */
+  #blur-overlay {
+    position: fixed; inset: 0; z-index: 8999;
+    background: rgba(13,0,8,0.98);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    opacity: 1; pointer-events: all;
+  }
+  #loader {
+    position: fixed; inset: 0; z-index: 9000;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 28px;
+    pointer-events: none; opacity: 1;
+  }
+  .loader-text {
+    font-family: 'Playfair Display','Times New Roman',serif;
+    font-style: italic; font-size: clamp(1.5rem,3.5vw,2.4rem);
+    font-weight: 700; letter-spacing: .1em; color: #fff;
+    text-shadow: 0 2px 14px rgba(255,80,160,.85), 0 0 44px rgba(255,80,160,.45);
+  }
+  .loader-hearts { display: flex; gap: 16px; align-items: center; }
+  .loader-hearts span {
+    font-size: 1.8rem; color: #ff6aaa; display: inline-block; line-height: 1;
+    animation: loaderHeartBounce 1.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(255,60,140,.75));
+  }
+  .loader-hearts span:nth-child(1){animation-delay:0s}
+  .loader-hearts span:nth-child(2){animation-delay:.18s}
+  .loader-hearts span:nth-child(3){animation-delay:.36s}
+  .loader-hearts span:nth-child(4){animation-delay:.54s}
+  .loader-hearts span:nth-child(5){animation-delay:.72s}
+  @keyframes loaderHeartBounce {
+    0%,75%,100% { transform: translateY(0) scale(1); opacity: .55; }
+    40%         { transform: translateY(-13px) scale(1.32); opacity: 1; }
+  }
+</style>
 </head>
 <body class="loading">
 
@@ -17,8 +53,8 @@
   <div id="scroll-progress"></div>
 
   <!-- ─── LOADING SCREEN ─── -->
-  <div id="blur-overlay"></div>
-  <div id="loader">
+  <div id="blur-overlay" style="opacity:1;pointer-events:all"></div>
+  <div id="loader" style="opacity:1">
     <p class="loader-text">Loading your scene</p>
     <div class="loader-hearts">
       <span>&#10084;</span>
@@ -174,30 +210,29 @@
     <h2 class="section-title reveal">Our Memories</h2>
     <p class="section-subtitle reveal">A little gallery of us.</p>
     <div class="gallery-grid reveal">
-      <!-- 📝 REPLACE src, alt, data-caption, data-date with your own photos -->
-      <div class="polaroid" data-caption="Where it all began" data-date="March 2022">
-        <div class="polaroid-img" style="background-image:url('img/memory1.jpg')"></div>
+      <div class="polaroid" data-caption="Where it all began" data-date="March 2022" data-src="Media/img1.png">
+        <div class="polaroid-img" style="background-image:url('Media/img1.png')"></div>
         <p class="polaroid-label">Where it all began</p>
       </div>
-      <div class="polaroid" data-caption="Our favorite place" data-date="July 2022">
-        <div class="polaroid-img" style="background-image:url('img/memory2.jpg')"></div>
+      <div class="polaroid" data-caption="Our favorite place" data-date="July 2022" data-src="Media/img2.jpg">
+        <div class="polaroid-img" style="background-image:url('Media/img2.jpg')"></div>
         <p class="polaroid-label">Our favorite place</p>
       </div>
-      <div class="polaroid" data-caption="That sunset together" data-date="October 2023">
-        <div class="polaroid-img" style="background-image:url('img/memory3.jpg')"></div>
-        <p class="polaroid-label">That sunset together</p>
+      <div class="polaroid" data-caption="That afternoon together" data-date="October 2023" data-src="Media/img3.jpeg">
+        <div class="polaroid-img" style="background-image:url('Media/img3.jpeg')"></div>
+        <p class="polaroid-label">That afternoon together</p>
       </div>
-      <div class="polaroid" data-caption="Laughing like always" data-date="February 2024">
-        <div class="polaroid-img" style="background-image:url('img/memory4.jpg')"></div>
+      <div class="polaroid" data-caption="Laughing like always" data-date="February 2024" data-src="Media/img4.jpeg">
+        <div class="polaroid-img" style="background-image:url('Media/img4.jpeg')"></div>
         <p class="polaroid-label">Laughing like always</p>
       </div>
-      <div class="polaroid" data-caption="Us, forever" data-date="March 2026">
-        <div class="polaroid-img" style="background-image:url('img/memory5.jpg')"></div>
+      <div class="polaroid" data-caption="Us, forever" data-date="March 2026" data-src="Media/img5.jpeg">
+        <div class="polaroid-img" style="background-image:url('Media/img5.jpeg')"></div>
         <p class="polaroid-label">Us, forever</p>
       </div>
-      <div class="polaroid" data-caption="My favorite smile" data-date="December 2025">
-        <div class="polaroid-img" style="background-image:url('img/memory6.jpg')"></div>
-        <p class="polaroid-label">My favorite smile</p>
+      <div class="polaroid" data-caption="My favourite smile" data-date="December 2025" data-src="Media/img6.jpeg">
+        <div class="polaroid-img" style="background-image:url('Media/img6.jpeg')"></div>
+        <p class="polaroid-label">My favourite smile</p>
       </div>
     </div>
   </section>
@@ -231,6 +266,6 @@
     <p class="farewell-text">Curious to capture more memories with you, Love you Chinnima.</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>
