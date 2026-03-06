@@ -19,6 +19,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── CUSTOM CURSOR GLOW ── */
+#cursor-glow {
+  position: fixed;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,100,170,0.10) 0%, rgba(255,62,138,0.04) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.35s ease;
+  opacity: 0;
+  will-change: left, top;
+}
+
+body:hover #cursor-glow {
+  opacity: 1;
+}
+
 /* ── HERO SECTION WRAPPER ── */
 #hero {
   position: relative;
@@ -512,7 +531,6 @@ spline-viewer,
 .section-title {
   font-family: 'Dancing Script', cursive;
   font-size: clamp(2.2rem, 5vw, 4rem);
-  color: #ffb3d9;
   text-align: center;
   margin-bottom: 12px;
   text-shadow: 0 0 40px rgba(255,80,160,0.35), 0 2px 20px rgba(255,62,138,0.2);
@@ -999,12 +1017,54 @@ spline-viewer,
 
 
 /* ══════════════════════════════════════════════
-   8. MUSIC TOGGLE
+   8. MUSIC CONTROLS
    ══════════════════════════════════════════════ */
-#music-toggle {
+#music-controls {
   position: fixed;
   top: 20px;
   right: 20px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#music-restart {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,110,180,0.25);
+  background: rgba(255,62,138,0.10);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255,200,225,0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+#music-restart.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+#music-restart:hover {
+  background: rgba(255,62,138,0.3);
+  transform: scale(1.12);
+  box-shadow: 0 0 16px rgba(255,62,138,0.35);
+}
+
+#music-restart:active {
+  transform: scale(0.92);
+}
+
+#music-toggle {
+  position: relative;
   z-index: 9998;
   width: 44px; height: 44px;
   border-radius: 50%;
@@ -1029,6 +1089,12 @@ spline-viewer,
 #music-toggle.playing {
   background: rgba(255,62,138,0.3);
   box-shadow: 0 0 16px rgba(255,62,138,0.4);
+  animation: musicPulse 2s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(255,62,138,0.4); }
+  50% { box-shadow: 0 0 28px rgba(255,62,138,0.65), 0 0 56px rgba(255,62,138,0.2); }
 }
 
 
@@ -1140,4 +1206,131 @@ spline-viewer,
   0% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(30px, -20px) scale(1.15); }
   100% { transform: translate(-15px, 10px) scale(0.9); }
+}
+
+/* ══════════════════════════════════════════════
+   SECTION DIVIDERS
+   ══════════════════════════════════════════════ */
+.section-divider {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0d0008;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  max-width: 180px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,110,180,0.3), transparent);
+}
+
+.divider-heart {
+  color: rgba(255,110,180,0.4);
+  font-size: 0.9rem;
+  margin: 0 16px;
+  animation: dividerPulse 3s ease-in-out infinite;
+}
+
+@keyframes dividerPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+/* ══════════════════════════════════════════════
+   SMOOTH MICRO-INTERACTIONS & POLISH
+   ══════════════════════════════════════════════ */
+
+/* Smooth focus outlines for accessibility */
+button:focus-visible {
+  outline: 2px solid rgba(255,110,180,0.6);
+  outline-offset: 3px;
+}
+
+/* Subtle text selection color */
+::selection {
+  background: rgba(255,62,138,0.35);
+  color: #fff;
+}
+
+/* Improved section title shimmer */
+.section-title {
+  background: linear-gradient(110deg, #ffb3d9 0%, #fff 25%, #ffb3d9 50%, #fff 75%, #ffb3d9 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: titleShimmer 6s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Soft glow on romantic-btn */
+.romantic-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.romantic-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+
+.romantic-btn:hover::after {
+  opacity: 1;
+}
+
+/* Polaroid tilt micro-interaction */
+.polaroid {
+  transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s, filter 0.4s;
+}
+
+.polaroid:hover {
+  filter: brightness(1.05) saturate(1.1);
+}
+
+/* Gallery modal smoother backdrop */
+.modal-backdrop {
+  transition: backdrop-filter 0.4s;
+}
+
+/* Letter paper subtle texture */
+.letter-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 28px,
+    rgba(200,180,170,0.08) 28px,
+    rgba(200,180,170,0.08) 29px
+  );
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Fade-in whole page on load */
+body {
+  animation: pageReveal 1.2s ease-out;
+}
+
+@keyframes pageReveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

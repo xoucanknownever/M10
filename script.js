@@ -570,52 +570,91 @@ if (easterClose) {
 }
 
 // ─────────────────────────────────────────────
-//  BACKGROUND MUSIC TOGGLE
+//  BACKGROUND MUSIC TOGGLE (pause/resume, no restart)
 // ─────────────────────────────────────────────
-const musicToggle = document.getElementById('music-toggle');
-const bgMusic     = document.getElementById('bg-music');
-const iconOn      = document.getElementById('music-icon-on');
-const iconOff     = document.getElementById('music-icon-off');
-let musicPlaying  = false;
+const musicToggle  = document.getElementById('music-toggle');
+const musicRestart = document.getElementById('music-restart');
+const bgMusic      = document.getElementById('bg-music');
+const iconOn       = document.getElementById('music-icon-on');
+const iconOff      = document.getElementById('music-icon-off');
+let musicPlaying   = false;
+let fadingInterval = null;
+
+function showRestartBtn() {
+  if (musicRestart) musicRestart.classList.add('visible');
+}
+function hideRestartBtn() {
+  if (musicRestart) musicRestart.classList.remove('visible');
+}
+
+function startMusic() {
+  if (fadingInterval) { clearInterval(fadingInterval); fadingInterval = null; }
+  bgMusic.play().then(() => {
+    musicPlaying = true;
+    musicToggle.classList.add('playing');
+    iconOn.style.display  = 'block';
+    iconOff.style.display = 'none';
+    showRestartBtn();
+    // Fade in volume
+    let vol = bgMusic.volume;
+    fadingInterval = setInterval(() => {
+      vol = Math.min(vol + 0.05, 0.4);
+      bgMusic.volume = vol;
+      if (vol >= 0.4) { clearInterval(fadingInterval); fadingInterval = null; }
+    }, 80);
+  }).catch(() => { /* autoplay blocked */ });
+}
+
+function pauseMusic() {
+  if (fadingInterval) { clearInterval(fadingInterval); fadingInterval = null; }
+  let vol = bgMusic.volume;
+  fadingInterval = setInterval(() => {
+    vol = Math.max(vol - 0.05, 0);
+    bgMusic.volume = vol;
+    if (vol <= 0) {
+      clearInterval(fadingInterval);
+      fadingInterval = null;
+      bgMusic.pause();
+      musicPlaying = false;
+      musicToggle.classList.remove('playing');
+      iconOn.style.display  = 'none';
+      iconOff.style.display = 'block';
+    }
+  }, 60);
+}
 
 if (musicToggle && bgMusic) {
   bgMusic.volume = 0;
 
   musicToggle.addEventListener('click', () => {
     if (!musicPlaying) {
-      bgMusic.play().then(() => {
-        musicPlaying = true;
-        musicToggle.classList.add('playing');
-        iconOn.style.display  = 'block';
-        iconOff.style.display = 'none';
-        // Fade in volume
-        let vol = 0;
-        const fadeIn = setInterval(() => {
-          vol = Math.min(vol + 0.05, 0.4);
-          bgMusic.volume = vol;
-          if (vol >= 0.4) clearInterval(fadeIn);
-        }, 80);
-      }).catch(() => {
-        // Autoplay blocked — ignore silently
-      });
+      startMusic();
     } else {
-      // Fade out volume
-      let vol = bgMusic.volume;
-      const fadeOut = setInterval(() => {
-        vol = Math.max(vol - 0.05, 0);
-        bgMusic.volume = vol;
-        if (vol <= 0) {
-          clearInterval(fadeOut);
-          bgMusic.pause();
-          musicPlaying = false;
-          musicToggle.classList.remove('playing');
-          iconOn.style.display  = 'none';
-          iconOff.style.display = 'block';
-        }
-      }, 60);
+      pauseMusic();
     }
   });
 }
+
+// Restart button — rewinds to 0:00 and plays
+if (musicRestart && bgMusic) {
+  musicRestart.addEventListener('click', () => {
+    bgMusic.currentTime = 0;
+    if (!musicPlaying) {
+      startMusic();
+    }
+  });
+}
+
+// Auto-play on first user interaction (click/touch anywhere)
+function autoPlayOnce() {
+  if (!musicPlaying && bgMusic) {
+    startMusic();
+  }
+  document.removeEventListener('click', autoPlayOnce);
+  document.removeEventListener('touchstart', autoPlayOnce);
+}
+document.addEventListener('click', autoPlayOnce, { once: true });
+document.addEventListener('touchstart', autoPlayOnce, { once: true });
 
 // ─────────────────────────────────────────────
 //  HIDE SCROLL HINT ON SCROLL
@@ -630,3 +669,23 @@ window.addEventListener('scroll', () => {
     hintHidden = true;
   }
 }, { passive: true });
+
+// ─────────────────────────────────────────────
+//  CURSOR GLOW FOLLOW
+// ─────────────────────────────────────────────
+const cursorGlow = document.getElementById('cursor-glow');
+if (cursorGlow) {
+  let glowX = 0, glowY = 0, targetGX = 0, targetGY = 0;
+  document.addEventListener('mousemove', e => {
+    targetGX = e.clientX;
+    targetGY = e.clientY;
+  });
+  function updateGlow() {
+    glowX += (targetGX - glowX) * 0.12;
+    glowY += (targetGY - glowY) * 0.12;
+    cursorGlow.style.left = glowX + 'px';
+    cursorGlow.style.top  = glowY + 'px';
+    requestAnimationFrame(updateGlow);
+  }
+  requestAnimationFrame(updateGlow);
+}
