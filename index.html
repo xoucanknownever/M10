@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Romantic Background</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.61/build/spline-viewer.js"></script>
+</head>
+<body class="loading">
+
+  <!-- ─── SCROLL PROGRESS BAR ─── -->
+  <div id="scroll-progress"></div>
+
+  <!-- ─── LOADING SCREEN ─── -->
+  <div id="blur-overlay"></div>
+  <div id="loader">
+    <p class="loader-text">Loading your scene</p>
+    <div class="loader-hearts">
+      <span>&#10084;</span>
+      <span>&#10084;</span>
+      <span>&#10084;</span>
+      <span>&#10084;</span>
+      <span>&#10084;</span>
+    </div>
+  </div>
+
+  <!-- ─── BACKGROUND MUSIC TOGGLE ─── -->
+  <button id="music-toggle" aria-label="Toggle music" title="Toggle Music">
+    <svg id="music-icon-off" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+      <line x1="1" y1="1" x2="23" y2="23" stroke-width="2.5"/>
+    </svg>
+    <svg id="music-icon-on" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+    </svg>
+  </button>
+  <!-- 🎵 REPLACE the src below with your own audio file path -->
+  <audio id="bg-music" loop preload="none">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION (existing — unchanged)
+       ═══════════════════════════════════════════ -->
+  <section id="hero">
+    <div id="bg"></div>
+    <div id="blobs"></div>
+    <div id="shimmer"></div>
+    <div id="parallax"></div>
+    <canvas id="canvas"></canvas>
+    <div id="vignette"></div>
+    <div id="pulse"></div>
+
+    <spline-viewer url="https://prod.spline.design/oCZuMvOV7nA3QXS4/scene.splinecode"></spline-viewer>
+
+    <h1 id="anniversary-text"><span>Happy 4th year</span><span>Anniversary</span></h1>
+
+    <!-- CTA button — covers Spline watermark -->
+    <button id="haryx-badge" type="button" onclick="window.location.href=''">
+      <i class="heart-icon">&#10084;</i> For You
+    </button>
+
+    <!-- Scroll down hint -->
+    <div id="scroll-hint">
+      <span>Scroll Down</span>
+      <div class="scroll-arrow">&#10084;</div>
+    </div>
+  </section>
+
+
+
+  <!-- ═══════════════════════════════════════════
+       2. DIGITAL LOVE LETTER
+       ═══════════════════════════════════════════ -->
+  <section id="love-letter" class="content-section">
+    <h2 class="section-title reveal">A Letter For You</h2>
+    <div class="letter-wrapper reveal">
+      <div class="letter-envelope" id="letter-envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body">
+          <button id="open-letter-btn">Open the Letter &#10084;</button>
+        </div>
+      </div>
+      <div class="letter-paper" id="letter-paper">
+        <div class="letter-text" id="letter-text">
+          <!-- 📝 REPLACE with your own love letter text -->
+          <p class="letter-greeting">My Dearest Love,</p>
+          <p>There are not enough words in any language to describe what you mean to me. You are the calm in my chaos, the light when my world goes dark, and the reason I believe in something beautiful.</p>
+          <p>Every morning I wake up grateful that the universe conspired to bring you into my life. You make ordinary moments extraordinary just by being you.</p>
+          <p>I love the way you laugh, the way you care, and the way you love — fiercely, tenderly, endlessly.</p>
+          <p>No matter where life takes us, my heart will always call your name.</p>
+          <p class="letter-closing">Forever & always yours,<br><em>Your Love</em></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       3. LONG DISTANCE VISUAL CONNECTION
+       ═══════════════════════════════════════════ -->
+  <section id="distance-section" class="content-section">
+    <h2 class="section-title reveal">Across the Miles</h2>
+    <div class="distance-map reveal">
+      <svg id="connection-map" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+        <!-- Minimal world silhouette outline -->
+        <ellipse cx="400" cy="200" rx="360" ry="170" fill="none" stroke="rgba(255,150,200,0.15)" stroke-width="1"/>
+        <ellipse cx="400" cy="200" rx="260" ry="120" fill="none" stroke="rgba(255,150,200,0.08)" stroke-width="0.5"/>
+
+        <!-- 📝 REPLACE cx/cy positions to match your two cities on the map -->
+        <!-- City 1 — Glowing dot -->
+        <circle class="city-dot city-dot-1" cx="220" cy="180" r="6" fill="#ff6eb4"/>
+        <circle class="city-pulse" cx="220" cy="180" r="6" fill="none" stroke="#ff6eb4" stroke-width="2"/>
+        <!-- City 2 — Glowing dot -->
+        <circle class="city-dot city-dot-2" cx="580" cy="160" r="6" fill="#ff6eb4"/>
+        <circle class="city-pulse" cx="580" cy="160" r="6" fill="none" stroke="#ff6eb4" stroke-width="2"/>
+
+        <!-- Curved connecting line -->
+        <path class="connection-line" d="M220,180 Q400,60 580,160" fill="none" stroke="url(#lineGrad)" stroke-width="2" stroke-dasharray="8 4"/>
+
+        <defs>
+          <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff6eb4"/>
+            <stop offset="50%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#ff6eb4"/>
+          </linearGradient>
+        </defs>
+
+        <!-- 📝 REPLACE city labels -->
+        <text x="220" y="210" text-anchor="middle" class="city-label">Your City</text>
+        <text x="580" y="190" text-anchor="middle" class="city-label">My City</text>
+      </svg>
+      <p class="distance-quote reveal">"No matter the distance, my heart always finds you."</p>
+    </div>
+  </section>
+
+
+
+  <!-- ═══════════════════════════════════════════
+       5. WHY I LOVE YOU — RANDOM GENERATOR
+       ═══════════════════════════════════════════ -->
+  <section id="why-love-section" class="content-section">
+    <h2 class="section-title reveal">Why I Love You</h2>
+    <div class="why-love-wrapper reveal">
+      <p id="love-reason" class="love-reason">"Click below to discover a reason…"</p>
+      <button id="love-reason-btn" class="romantic-btn">Click to See Why I Love You &#10084;</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       6. MEMORY GALLERY — POLAROID STYLE
+       ═══════════════════════════════════════════ -->
+  <section id="gallery-section" class="content-section">
+    <h2 class="section-title reveal">Our Memories</h2>
+    <p class="section-subtitle reveal">A little gallery of us.</p>
+    <div class="gallery-grid reveal">
+      <!-- 📝 REPLACE src, alt, data-caption, data-date with your own photos -->
+      <div class="polaroid" data-caption="Where it all began" data-date="March 2022">
+        <div class="polaroid-img" style="background-image:url('img/memory1.jpg')"></div>
+        <p class="polaroid-label">Where it all began</p>
+      </div>
+      <div class="polaroid" data-caption="Our favorite place" data-date="July 2022">
+        <div class="polaroid-img" style="background-image:url('img/memory2.jpg')"></div>
+        <p class="polaroid-label">Our favorite place</p>
+      </div>
+      <div class="polaroid" data-caption="That sunset together" data-date="October 2023">
+        <div class="polaroid-img" style="background-image:url('img/memory3.jpg')"></div>
+        <p class="polaroid-label">That sunset together</p>
+      </div>
+      <div class="polaroid" data-caption="Laughing like always" data-date="February 2024">
+        <div class="polaroid-img" style="background-image:url('img/memory4.jpg')"></div>
+        <p class="polaroid-label">Laughing like always</p>
+      </div>
+      <div class="polaroid" data-caption="Us, forever" data-date="March 2026">
+        <div class="polaroid-img" style="background-image:url('img/memory5.jpg')"></div>
+        <p class="polaroid-label">Us, forever</p>
+      </div>
+      <div class="polaroid" data-caption="My favorite smile" data-date="December 2025">
+        <div class="polaroid-img" style="background-image:url('img/memory6.jpg')"></div>
+        <p class="polaroid-label">My favorite smile</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Gallery Modal ─── -->
+  <div id="gallery-modal" class="gallery-modal" role="dialog" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close">&times;</button>
+      <img id="modal-img" src="" alt="">
+      <p id="modal-caption" class="modal-caption"></p>
+      <span id="modal-date" class="modal-date"></span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       7. HIDDEN EASTER EGG
+       ═══════════════════════════════════════════ -->
+  <div id="easter-egg-star" title="✨" aria-label="A little secret">&#10022;</div>
+  <div id="easter-egg-message" aria-hidden="true">
+    <p>You are the most beautiful chapter of my life. I'd choose you in every universe, every timeline, every heartbeat. &#10084;</p>
+    <button id="easter-egg-close">&times;</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ -->
+  <footer class="site-footer content-section">
+    <p>Made with &#10084; for the love of my life</p>
+    <p class="footer-year">March 10, 2022 — Forever</p>
+    <p class="farewell-text">Curious to capture more memories with you, Love you Chinnima.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
