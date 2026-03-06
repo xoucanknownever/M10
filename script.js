@@ -657,8 +657,36 @@ if (musicRestart && bgMusic) {
 
 // Auto-play music after loading screen ends
 function autoPlayAfterLoad() {
-  if (!musicPlaying && bgMusic) {
-    startMusic();
+  if (musicPlaying || !bgMusic) return;
+  // Attempt immediate autoplay
+  bgMusic.volume = 0;
+  const playAttempt = bgMusic.play();
+  if (playAttempt) {
+    playAttempt.then(() => {
+      // Autoplay succeeded
+      musicPlaying = true;
+      musicToggle.classList.add('playing');
+      iconOn.style.display  = 'block';
+      iconOff.style.display = 'none';
+      showRestartBtn();
+      let vol = 0;
+      fadingInterval = setInterval(() => {
+        vol = Math.min(vol + 0.05, 0.4);
+        bgMusic.volume = vol;
+        if (vol >= 0.4) { clearInterval(fadingInterval); fadingInterval = null; musicBusy = false; }
+      }, 80);
+    }).catch(() => {
+      // Autoplay blocked by browser — wait for first user gesture
+      function gesturePlay() {
+        if (!musicPlaying) startMusic();
+        document.removeEventListener('click', gesturePlay);
+        document.removeEventListener('touchstart', gesturePlay);
+        document.removeEventListener('keydown', gesturePlay);
+      }
+      document.addEventListener('click', gesturePlay, { once: true });
+      document.addEventListener('touchstart', gesturePlay, { once: true });
+      document.addEventListener('keydown', gesturePlay, { once: true });
+    });
   }
 }
 

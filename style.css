@@ -59,7 +59,7 @@ body:hover #cursor-glow {
   height: 180px;
   background: linear-gradient(to bottom, transparent 0%, #0d0008 100%);
   pointer-events: none;
-  z-index: 30;
+  z-index: 15;
 }
 
 /* ── BACKGROUND ── */
@@ -221,7 +221,7 @@ spline-viewer {
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 20;
+  z-index: 25;
   margin: 0;
   padding: 0 16px;
   width: max-content;
@@ -370,16 +370,15 @@ spline-viewer {
   z-index: 8999;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  background: rgba(55, 0, 22, 0.18);
+  background: rgba(13, 0, 8, 0.98);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.loading #blur-overlay {
   opacity: 1;
   pointer-events: all;
-  background: rgba(13, 0, 8, 0.95);
 }
 
 /* ── LOADER PANEL ── */
@@ -1364,12 +1363,12 @@ button:focus-visible {
   z-index: 0;
 }
 
-/* Fade-in whole page on load */
-body {
-  animation: pageReveal 1.2s ease-out;
+/* Fade-in whole page on load — only after loading screen */
+body.loaded {
+  animation: pageReveal 1s ease-out;
 }
 
 @keyframes pageReveal {
-  from { opacity: 0; }
+  from { opacity: 0.85; }
   to { opacity: 1; }
 }
