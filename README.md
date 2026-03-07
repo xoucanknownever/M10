@@ -2,7 +2,7 @@
 
 A romantic, interactive anniversary website built with vanilla HTML, CSS, and JavaScript.
 
-🔗 **Live Site:** [bhyresh-dev.github.io/M10](https://bhyresh-dev.github.io/M10/)
+🔗 **Live Site:** [bhyresh-dev.github.io/M10](https://xoucanknownever.github.io/M10/)
 
 ---
 
