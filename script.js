@@ -591,19 +591,20 @@ document.addEventListener('keydown', e => {
 // ─────────────────────────────────────────────
 //  EASTER EGG
 // ─────────────────────────────────────────────
-const easterStar    = document.getElementById('easter-egg-star');
+const haryxBadge    = document.getElementById('haryx-badge');
 const easterMessage = document.getElementById('easter-egg-message');
 const easterClose   = document.getElementById('easter-egg-close');
 
-if (easterStar) {
-  easterStar.addEventListener('click', () => {
-    easterMessage.classList.add('visible');
-    easterMessage.setAttribute('aria-hidden', 'false');
+if (haryxBadge) {
+  haryxBadge.addEventListener('click', () => {
+    const isOpen = easterMessage.classList.toggle('visible');
+    easterMessage.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
   });
 }
 
 if (easterClose) {
-  easterClose.addEventListener('click', () => {
+  easterClose.addEventListener('click', (e) => {
+    e.stopPropagation();
     easterMessage.classList.remove('visible');
     easterMessage.setAttribute('aria-hidden', 'true');
   });

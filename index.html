@@ -109,9 +109,15 @@
     <h1 id="anniversary-text"><span>Happy 4th year</span><span>Anniversary</span></h1>
 
     <!-- CTA button — covers Spline watermark -->
-    <button id="haryx-badge" type="button" onclick="window.location.href=''">
-      <i class="heart-icon">&#10084;</i> For You
-    </button>
+    <div id="for-you-wrapper">
+      <div id="easter-egg-message" aria-hidden="true">
+        <p>You are the most beautiful chapter of my life. I&#39;d choose you in every universe, every timeline, every heartbeat. &#10084;</p>
+        <button id="easter-egg-close">Close</button>
+      </div>
+      <button id="haryx-badge" type="button">
+        <i class="heart-icon">&#10084;</i> For You
+      </button>
+    </div>
 
     <!-- Scroll down hint -->
     <div id="scroll-hint">
@@ -137,12 +143,13 @@
       <div class="letter-paper" id="letter-paper">
         <div class="letter-text" id="letter-text">
           <!-- 📝 REPLACE with your own love letter text -->
-          <p class="letter-greeting">My Dearest Love,</p>
-          <p>There are not enough words in any language to describe what you mean to me. You are the calm in my chaos, the light when my world goes dark, and the reason I believe in something beautiful.</p>
-          <p>Every morning I wake up grateful that the universe conspired to bring you into my life. You make ordinary moments extraordinary just by being you.</p>
-          <p>I love the way you laugh, the way you care, and the way you love — fiercely, tenderly, endlessly.</p>
-          <p>No matter where life takes us, my heart will always call your name.</p>
-          <p class="letter-closing">Forever & always yours,<br><em>Your Love</em></p>
+          <p class="letter-greeting">ನನ್ನ ಪ್ರೀತಿಯ ಮುದ್ದುಮರಿಗೆ&hearts;,</p>
+          <p>ನಾಲ್ಕು ವರ್ಷಗಳು ಹೇಗೆ ಕಳೆದವು ಅಂತನೇ ಗೊತ್ತಿಲ್ಲ ಅಲ್ಲವಾ. ಮೊದಲ ದಿನದಿಂದಲೇ ನೀನು ನನ್ನ ಜೊತೆ ಪ್ರತಿ ಹೆಜ್ಜೆಗೂ ನನಗೆ ಬೆನ್ನೆಲುಬಾಗಿ ನಿಂತಿದ್ದೀಯ.</p>
+          <p>ನಮ್ಮ ಈ ನಾಲ್ಕು ವರ್ಷದ ಪ್ರೀತಿಯಲ್ಲಿ ಹೆಚ್ಚು ಕೋಪ ಮಾಡಿಕೊಂಡಿದ್ದು ನಾನೇ — ಅದು ನನಗೆ ಚೆನ್ನಾಗಿ ಗೊತ್ತು. ಆದರೆ ಆ ಕೋಪಕ್ಕೆ ಕಾರಣನು ನೀನೆ ,  ಸಮಾಧಾನನು ನೀನೆ.</p>
+          <p>ನಾವಿಬ್ಬರು ಯಾವ ಕೆಲಸದಲ್ಲಿ ಇದ್ದರೂ, ಯಾವತ್ತೂ ಮಾತಾಡದೇ ಇದ್ದದ್ದೇ ಇಲ್ಲ. ಈ ನಾಲ್ಕು ವರ್ಷಗಳಲ್ಲಿ ನಾವು ಎಲ್ಲವನ್ನೂ ಎದುರಿಸಿ ಬಂದಿದ್ದೇವೆ — ಅದು ಕಷ್ಟವಾಗಿರಲಿ, ಸುಖವಾಗಿರಲಿ — ಇಬ್ಬರೂ ಒಬ್ಬರ ಕೈ ಹಿಡಿದು ಮುಂದೆ ಬಂದಿದ್ದೇವೆ.</p>
+          <p>ಹಾಗೆಯೇ ಇನ್ನು ನಮ್ಮ ಜೀವನಪೂರ್ತಿ ಇಬ್ಬರೂ ಜೊತೆಯಾಗಿ ಬದುಕಿ ಬಾಳಬೇಕು, ಸದಾ ಜೊತೆಯೇ ಇರಬೇಕು ಅನ್ನೋದೇ ನನ್ನ ಕೋರಿಕೆ.</p>
+          <p>ನಾವು ನಂಬಿರುವ ಆ ತಾಯಿ ಇದನ್ನೂ ಈಡೇರಿಸುತ್ತಾಳೆ ಎಂದು ನಾನು ನಂಬಿದ್ದೇನೆ. ಅವಳೇ ನಮ್ಮ ಈ ಪ್ರೀತಿಗೆ ಸಾಕ್ಷಿ&#x1F64F;.</p>
+          <p class="letter-closing">ಎಂದೆಂದಿಗೂ ಮತ್ತು ಯಾವಾಗಲೂ,<br><em>ನಿನ್ನ ಪ್ರೀತಿಯ</em><br><em>ಬುಬುಮ [ಭೈರೇಶ್ ಬಿ.ಎಸ್ / ಹರ್ಷವರ್ಧನ ಬಿ.ಎಸ್]</em></p>
         </div>
       </div>
     </div>
@@ -246,15 +253,6 @@
       <p id="modal-caption" class="modal-caption"></p>
       <span id="modal-date" class="modal-date"></span>
     </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════
-       7. HIDDEN EASTER EGG
-       ═══════════════════════════════════════════ -->
-  <div id="easter-egg-star" title="✨" aria-label="A little secret">&#10022;</div>
-  <div id="easter-egg-message" aria-hidden="true">
-    <p>You are the most beautiful chapter of my life. I'd choose you in every universe, every timeline, every heartbeat. &#10084;</p>
-    <button id="easter-egg-close">&times;</button>
   </div>
 
   <!-- ═══════════════════════════════════════════

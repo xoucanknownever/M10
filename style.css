@@ -260,11 +260,15 @@ spline-viewer {
 }
 
 /* ── BUILT BY HARYX BADGE ── */
-#haryx-badge {
+#for-you-wrapper {
   position: absolute;
   bottom: 58px;
   right: 16px;
   z-index: 9999;
+}
+
+#haryx-badge {
+  position: relative;
   padding: 15px 25px;
   background: linear-gradient(135deg, rgba(255,62,138,0.85), rgba(192,0,95,0.92));
   border: 1px solid rgba(255,180,220,0.35);
@@ -436,7 +440,6 @@ body.loading #canvas,
 body.loading #music-controls,
 body.loading #scroll-progress,
 body.loading #scroll-hint,
-body.loading #easter-egg-star,
 body.loading #cursor-glow {
   opacity: 0 !important;
   pointer-events: none !important;
@@ -450,8 +453,7 @@ spline-viewer,
 #haryx-badge,
 #canvas,
 #music-controls,
-#scroll-hint,
-#easter-egg-star {
+#scroll-hint {
   transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -987,73 +989,82 @@ spline-viewer,
 
 
 /* ══════════════════════════════════════════════
-   7. EASTER EGG
+   7. FOR YOU POPOVER
    ══════════════════════════════════════════════ */
-#easter-egg-star {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 9990;
-  font-size: 1rem;
-  color: rgba(255,200,225,0.25);
-  cursor: pointer;
-  transition: color 0.4s, text-shadow 0.4s, transform 0.4s;
-  user-select: none;
-}
-
-#easter-egg-star:hover {
-  color: rgba(255,200,225,0.6);
-  text-shadow: 0 0 12px rgba(255,110,180,0.5);
-  transform: scale(1.3) rotate(15deg);
-}
-
 #easter-egg-message {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scale(0.8) rotateX(8deg);
-  z-index: 100001;
-  max-width: 420px;
-  width: 88%;
-  background: rgba(30,0,15,0.95);
-  border: 1px solid rgba(255,110,180,0.3);
-  border-radius: 24px;
-  padding: 40px 32px;
+  position: absolute;
+  bottom: calc(100% + 14px);
+  right: 0;
+  width: 280px;
+  background: rgba(20,0,12,0.97);
+  border: 1px solid rgba(255,110,180,0.35);
+  border-radius: 20px;
+  padding: 22px 20px 18px;
   text-align: center;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow: 0 0 80px rgba(255,62,138,0.25), 0 0 160px rgba(255,62,138,0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 60px rgba(255,62,138,0.3),
+    0 8px 40px rgba(0,0,0,0.7),
+    inset 0 0 20px rgba(255,62,138,0.05);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  transform: translateY(10px) scale(0.94);
+  transition:
+    opacity 0.45s cubic-bezier(0.16,1,0.3,1),
+    transform 0.45s cubic-bezier(0.16,1,0.3,1);
+  z-index: 1;
+}
+
+/* caret arrow pointing down to the button */
+#easter-egg-message::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 26px;
+  width: 14px;
+  height: 14px;
+  background: rgba(20,0,12,0.97);
+  border-right: 1px solid rgba(255,110,180,0.35);
+  border-bottom: 1px solid rgba(255,110,180,0.35);
+  transform: rotate(45deg);
 }
 
 #easter-egg-message.visible {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1) rotateX(0deg);
   pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
 #easter-egg-message p {
   font-family: 'Dancing Script', cursive;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #ffb3d9;
-  line-height: 1.8;
-  text-shadow: 0 0 20px rgba(255,80,160,0.4);
+  line-height: 1.75;
+  text-shadow: 0 0 18px rgba(255,80,160,0.4);
+  margin: 0 0 14px;
 }
 
 #easter-egg-close {
-  position: absolute;
-  top: 10px; right: 14px;
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  color: rgba(255,180,220,0.6);
+  display: inline-block;
+  padding: 7px 22px;
+  background: rgba(255,62,138,0.12);
+  border: 1px solid rgba(255,110,180,0.35);
+  border-radius: 20px;
+  color: rgba(255,180,220,0.85);
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
 #easter-egg-close:hover {
+  background: rgba(255,62,138,0.28);
   color: #ffb3d9;
+  border-color: rgba(255,110,180,0.65);
 }
 
 
